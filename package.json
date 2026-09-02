@@ -1,0 +1,38 @@
+{
+  "name": "emw",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "workspaces": [
+    "src/electron"
+  ],
+  "engines": {
+    "node": ">=24.20.0",
+    "npm": ">=11.19.0"
+  },
+  "scripts": {
+    "install:all": "node scripts/install-all.mjs",
+    "clean:all": "node scripts/clean-all.mjs",
+    "build": "npm run build:electron && npm run build:windows",
+    "build:electron": "node scripts/build-electron.mjs",
+    "build:windows": "node scripts/build-windows.mjs",
+    "dev": "concurrently -k -n renderer,electron-main,electron \"npm run dev --prefix src/windows/main\" \"npm run dev --workspace @emw/electron\" \"npm run dev:electron\"",
+    "dev:electron": "wait-on tcp:5173 file:src/electron/dist/main.js && cross-env ELECTRON_RENDERER_URL=http://localhost:5173 electronmon src/electron/dist/main.js",
+    "start": "electron dist"
+  },
+  "electronmon": {
+    "patterns": [
+      "!dist/**",
+      "!scripts/**",
+      "!src/electron/src/**",
+      "!src/windows/**"
+    ]
+  },
+  "devDependencies": {
+    "concurrently": "10.0.5",
+    "cross-env": "10.1.0",
+    "electron": "44.1.0",
+    "electronmon": "2.0.4",
+    "wait-on": "9.1.0"
+  }
+}

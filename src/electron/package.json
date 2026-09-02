@@ -1,0 +1,15 @@
+{
+  "name": "@emw/electron",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node esbuild.config.mjs",
+    "dev": "node esbuild.config.mjs --watch"
+  },
+  "devDependencies": {
+    "@types/node": "26.4.0",
+    "esbuild": "0.28.2",
+    "typescript": "7.0.2"
+  }
+}
