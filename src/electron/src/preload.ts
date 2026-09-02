@@ -1,4 +1,4 @@
-import { contextBridge } from 'electron'
+import { contextBridge } from 'electron';
 
 const electronAPI = Object.freeze({
   platform: process.platform,
@@ -7,6 +7,6 @@ const electronAPI = Object.freeze({
     electron: process.versions.electron,
     node: process.versions.node,
   }),
-})
+});
 
-contextBridge.exposeInMainWorld('electronAPI', electronAPI)
+contextBridge.exposeInMainWorld('electronAPI', electronAPI);

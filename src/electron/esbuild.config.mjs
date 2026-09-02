@@ -1,14 +1,14 @@
-import { rm } from 'node:fs/promises'
-import { dirname, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { rm } from 'node:fs/promises';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import { build, context } from 'esbuild'
+import { build, context } from 'esbuild';
 
-const projectDirectory = dirname(fileURLToPath(import.meta.url))
-const sourceDirectory = resolve(projectDirectory, 'src')
+const projectDirectory = dirname(fileURLToPath(import.meta.url));
+const sourceDirectory = resolve(projectDirectory, 'src');
 
-const outputDirectory = resolve(projectDirectory, 'dist')
-const watch = process.argv.includes('--watch')
+const outputDirectory = resolve(projectDirectory, 'dist');
+const watch = process.argv.includes('--watch');
 
 const sharedOptions = {
   bundle: true,
@@ -16,7 +16,7 @@ const sharedOptions = {
   target: 'node24',
   external: ['electron'],
   logLevel: 'info',
-}
+};
 
 const buildOptions = [
   {
@@ -31,16 +31,14 @@ const buildOptions = [
     outfile: resolve(outputDirectory, 'preload.cjs'),
     format: 'cjs',
   },
-]
+];
 
-await rm(outputDirectory, { recursive: true, force: true })
+await rm(outputDirectory, { recursive: true, force: true });
 
 if (watch) {
-  const contexts = await Promise.all(
-    buildOptions.map((options) => context(options)),
-  )
+  const contexts = await Promise.all(buildOptions.map((options) => context(options)));
 
-  await Promise.all(contexts.map((buildContext) => buildContext.watch()))
+  await Promise.all(contexts.map((buildContext) => buildContext.watch()));
 } else {
-  await Promise.all(buildOptions.map((options) => build(options)))
+  await Promise.all(buildOptions.map((options) => build(options)));
 }

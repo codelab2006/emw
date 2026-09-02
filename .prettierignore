@@ -1,0 +1,7 @@
+.agents
+.codex
+.dev
+dist
+node_modules
+src/**/dist
+src/**/node_modules
