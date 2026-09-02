@@ -3,6 +3,8 @@ import { fileURLToPath } from "node:url";
 
 import { app, BrowserWindow } from "electron";
 
+import { getRendererConfig } from "./renderer-config.js";
+
 const currentDirectory = dirname(fileURLToPath(import.meta.url));
 
 function createWindow(): void {
@@ -11,16 +13,24 @@ function createWindow(): void {
     height: 600,
     webPreferences: {
       preload: resolve(currentDirectory, "preload.cjs"),
+      nodeIntegration: false,
+      contextIsolation: true,
+      sandbox: true,
+      webSecurity: true,
+      allowRunningInsecureContent: false,
     },
   });
 
-  const rendererUrl = process.env.ELECTRON_RENDERER_URL;
+  const renderer = getRendererConfig("main");
 
-  if (rendererUrl) {
-    void window.loadURL(rendererUrl);
+  if (renderer?.url) {
+    void window.loadURL(renderer.url);
   } else {
     void window.loadFile(
-      resolve(currentDirectory, "../windows/main/index.html"),
+      resolve(
+        app.getAppPath(),
+        renderer?.fallback ?? "windows/main/index.html",
+      ),
     );
   }
 }

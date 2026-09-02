@@ -13,11 +13,10 @@
   "scripts": {
     "install:all": "node scripts/install-all.mjs",
     "clean:all": "node scripts/clean-all.mjs",
-    "build": "npm run build:electron && npm run build:windows",
+    "build": "npm run build:electron && npm run build:windows && node scripts/build-renderer-config.mjs",
     "build:electron": "node scripts/build-electron.mjs",
     "build:windows": "node scripts/build-windows.mjs",
-    "dev": "concurrently -k -n renderer,electron-main,electron \"npm run dev --prefix src/windows/main\" \"npm run dev --workspace @emw/electron\" \"npm run dev:electron\"",
-    "dev:electron": "wait-on tcp:5173 file:src/electron/dist/main.js && cross-env ELECTRON_RENDERER_URL=http://localhost:5173 electronmon src/electron/dist/main.js",
+    "dev": "node scripts/dev.mjs",
     "start": "electron dist"
   },
   "electronmon": {
@@ -29,10 +28,9 @@
     ]
   },
   "devDependencies": {
-    "concurrently": "10.0.5",
-    "cross-env": "10.1.0",
     "electron": "44.1.0",
     "electronmon": "2.0.4",
+    "tree-kill": "1.2.2",
     "wait-on": "9.1.0"
   }
 }
