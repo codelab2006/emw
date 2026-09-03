@@ -21,19 +21,12 @@
     "format:check": "prettier --check .",
     "start": "electron dist"
   },
-  "electronmon": {
-    "patterns": [
-      "!dist/**",
-      "!scripts/**",
-      "!src/electron/src/**",
-      "!src/windows/**"
-    ]
-  },
   "devDependencies": {
     "electron": "44.1.0",
-    "electronmon": "2.0.4",
     "prettier": "3.9.6",
-    "tree-kill": "1.2.2",
-    "wait-on": "9.1.0"
+    "tree-kill": "1.2.2"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
   }
 }
