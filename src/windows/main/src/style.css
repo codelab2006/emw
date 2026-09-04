@@ -1,7 +1,48 @@
 html,
-body,
-#app {
+body {
   width: 100%;
   height: 100%;
   margin: 0;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  color: #202124;
+  font-family: system-ui, sans-serif;
+  background: #f7f8fa;
+}
+
+#app {
+  min-width: 20rem;
+  text-align: center;
+}
+
+.runtime-info {
+  margin: 1.5rem 0;
+  overflow: hidden;
+  text-align: left;
+  background: white;
+  border: 1px solid #e2e5e9;
+  border-radius: 0.75rem;
+}
+
+.runtime-info div {
+  display: grid;
+  grid-template-columns: 6rem 1fr;
+  gap: 1rem;
+  padding: 0.7rem 1rem;
+}
+
+.runtime-info div + div {
+  border-top: 1px solid #e2e5e9;
+}
+
+.runtime-info dt {
+  color: #5f6368;
+}
+
+.runtime-info dd {
+  margin: 0;
+  font-family: ui-monospace, monospace;
 }

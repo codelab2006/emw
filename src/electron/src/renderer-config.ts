@@ -5,7 +5,7 @@ import { app } from 'electron';
 
 export interface RendererConfigEntry {
   url: string | null;
-  fallback: string;
+  fallback: string | null;
 }
 
 type RendererConfig = Record<string, RendererConfigEntry>;

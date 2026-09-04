@@ -81,7 +81,7 @@ export class RendererManager {
         windowId,
         {
           url: state.status === 'running' ? `http://localhost:${state.port}` : null,
-          fallback: `windows/${windowId}/index.html`,
+          fallback: null,
         },
       ]),
     );

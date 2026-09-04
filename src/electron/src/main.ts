@@ -1,54 +1,21 @@
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { app, Menu } from 'electron';
 
-import { app, BrowserWindow } from 'electron';
+import { IpcHandlers } from './ipc-handlers.js';
+import { WindowManager } from './window-manager.js';
 
-import { getRendererConfig } from './renderer-config.js';
-
-const currentDirectory = dirname(fileURLToPath(import.meta.url));
-
-async function createWindow(): Promise<void> {
-  const window = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      preload: resolve(currentDirectory, 'preload.cjs'),
-      nodeIntegration: false,
-      contextIsolation: true,
-      sandbox: true,
-      webSecurity: true,
-      allowRunningInsecureContent: false,
-    },
-  });
-
-  const renderer = getRendererConfig('main');
-
-  if (!renderer) {
-    throw new Error('Missing renderer config for windowId "main"');
-  }
-
-  const fallbackPath = resolve(app.getAppPath(), renderer.fallback);
-
-  if (renderer.url) {
-    try {
-      await window.loadURL(renderer.url);
-      return;
-    } catch (error) {
-      console.error(`Failed to load remote renderer ${renderer.url}; using ${fallbackPath}`, error);
-    }
-  }
-
-  await window.loadFile(fallbackPath);
-}
+const windowManager = new WindowManager();
+const ipcHandlers = new IpcHandlers(windowManager);
 
 app
   .whenReady()
   .then(async () => {
-    await createWindow();
+    Menu.setApplicationMenu(null);
+    ipcHandlers.register();
+    await windowManager.open('main');
 
     app.on('activate', () => {
-      if (BrowserWindow.getAllWindows().length === 0) {
-        void createWindow().catch((error) => {
+      if (windowManager.size === 0) {
+        void windowManager.open('main').catch((error) => {
           console.error('Failed to recreate the main window', error);
         });
       }
@@ -63,4 +30,8 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
+
+app.on('will-quit', () => {
+  ipcHandlers.unregister();
 });
